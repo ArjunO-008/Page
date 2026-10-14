@@ -8,7 +8,7 @@ export default async function connectDB() {
         await mongoose.connect(DB_URL);
         return true;
     } catch (err) {
-        throw err;
+        return false;
     }
 }
 
