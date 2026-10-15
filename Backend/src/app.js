@@ -35,6 +35,3 @@ const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
     process.exit(1);
   }
 })();
-
-
-
