@@ -1,11 +1,8 @@
-
-
-
-
+import verifyGoogleIdToken from '../services/auth.service.js';
 
 const handleGoogleAuth = async(req,res)=>{
     try{
-        const credential = req.body.credential;
+        const credential = req?.body?.credential;
         if(!credential || !(typeof credential === "string") || !credential.trim()){
             return res.status(400).json({
                 success:false,
@@ -13,19 +10,19 @@ const handleGoogleAuth = async(req,res)=>{
             });
         }
 
+        const data = await verifyGoogleIdToken(credential);        
+        return res.status(200).json(data);       
+
     }catch (err) {
         console.error("Internal Server Error:",err);
-        return res.status(500).json({
+        return res.status(err.status || 500).json({
             success:false,
-            message:"Internal Server Error",
+            message:err.message,
         })
         
     }
 
 
 }
-
-
-
 
 export default handleGoogleAuth;

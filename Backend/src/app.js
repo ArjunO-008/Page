@@ -1,10 +1,11 @@
 import 'dotenv/config'
-import express from 'express';
+import express, { json } from 'express';
 import connectDB from './database/database.js';
 
 const app = express();
 const port = process.env.PORT || 3000;
 
+app.use(express.json());
 //Routings:
 import authRoutes from './routes/auth.routes.js';
 

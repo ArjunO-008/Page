@@ -15,13 +15,12 @@ const verifyGoogleIdToken = async (credential) => {
         const payload = loginTicket.getPayload();
 
         if(!payload?.sub || !payload?.email || !payload?.email_verified){
-            return{
-                success:false,
-                status:401,
-                message:"Unauthorized: Invalid Google Token"
-            }
+            const err = new Error("Unauthorized: Invalid Google Token");
+            err.status = 401;
+            err.success = false;
+            throw err;
         }
-        
+
         return {
             success: true,
             user: {
@@ -35,15 +34,10 @@ const verifyGoogleIdToken = async (credential) => {
 
     } catch (err) {
         console.error("Google Token Verification Failed",err);
-        return{
-            success:false,
-            message:err.message,
-        }
-
+        err.status = err.status ?? 500;
+        err.message = err.message ?? "Google Token Verification Failed";
+        throw err;       
     }
-
-
-
-
 }
+
 export default verifyGoogleIdToken;
