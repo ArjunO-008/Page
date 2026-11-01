@@ -5,6 +5,13 @@ import connectDB from './database/database.js';
 const app = express();
 const port = process.env.PORT || 3000;
 
+//Routings:
+import authRoutes from './routes/auth.routes.js';
+
+app.use('/auth',authRoutes);
+
+
+//Port Listening and DataBase Connection (Has the DB Re-Conntivity Login)
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 (async () => {
