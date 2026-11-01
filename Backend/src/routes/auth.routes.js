@@ -1,8 +1,7 @@
 import { Router } from "express";
+import {handleGoogleAuth} from '../controllers/auth.controller.js';
 
 const router = Router();
 
-router.route('/google').post((req,res)=>{
-    res.send("Successfull Routes to Google Auth");
-})
-export default router
+router.route('/google').post(handleGoogleAuth);
+export default router;
