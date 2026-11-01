@@ -16,6 +16,7 @@ const refreshSessionSchema = new Schema({
     familyId: {
         type: Schema.Types.ObjectId,
         required:true,
+        index:true,
     },
     expiresAt:{
         type:Date,

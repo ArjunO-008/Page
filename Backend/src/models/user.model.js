@@ -19,7 +19,6 @@ const userSchema = new Schema({
         type: String,
         required: true,
         trim: true,
-        index: true
     },
     avatarUrl:{
         type:String,
