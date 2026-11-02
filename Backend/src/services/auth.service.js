@@ -34,7 +34,6 @@ const verifyGoogleIdToken = async (credential) => {
         }
 
     } catch (err) {
-        console.error("Google Token Verification Failed", err);
         err.status = err.status ?? 500;
         err.message = err.message ?? "Google Token Verification Failed";
         throw err;
@@ -43,29 +42,28 @@ const verifyGoogleIdToken = async (credential) => {
 
 const findOrCreateUser = async (verifiedData) => {
     try {
-            const user = await User.findOne({googleSub:verifiedData.sub});
-            if(user) return user;
+        const user = await User.findOne({ googleSub: verifiedData.sub });
+        if (user) return user;
 
-            const newUser = await User.create({
-                googleSub:verifiedData.sub,
-                email:verifiedData.email,
-                displayName:verifiedData.name,
-                avatarUrl:verifiedData.picture || verifiedData.email.charAt(0).toUpperCase(),
-            })
+        const newUser = await User.create({
+            googleSub: verifiedData.sub,
+            email: verifiedData.email,
+            displayName: verifiedData.name,
+            avatarUrl: verifiedData.picture || undefined,
+        });
 
-            if(!newUser){
-                const err = new Error();
-                err.status = 400;
-                err.success = false;
-                throw err;
-
-            }
-
-            return newUser;
+        return newUser;
     } catch (err) {
+        err.status = err.status ?? 500;
+        err.message = err.message ?? "MongoDB Atlas Error";
+        throw err;
 
     }
 
 }
+const authServices = {
+    verifyGoogleIdToken,
+    findOrCreateUser,
+}
 
-export default { verifyGoogleIdToken, findOrCreateUser };
+export default authServices;
