@@ -1,5 +1,6 @@
 import { OAuth2Client } from 'google-auth-library';
 import { User } from '../models/user.model.js'
+import jwt from 'jsonwebtoken';
 
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 const oauth2client = new OAuth2Client(
@@ -61,9 +62,31 @@ const findOrCreateUser = async (verifiedData) => {
     }
 
 }
+
+const generateAccessToken = (userData) => {
+    const payload = {
+        sub: userData._id.toString(),
+    }
+    const accessToken = jwt.sign(
+        payload,
+        process.env.JWT_SECRET,
+        {
+            expiresIn: '15m',
+            algorithm: 'HS256',
+            issuer: "page-api",
+            audience: "page-api",
+        }
+    )
+
+    return accessToken;
+}
+
+
 const authServices = {
     verifyGoogleIdToken,
     findOrCreateUser,
+    generateAccessToken,
 }
 
 export default authServices;
+

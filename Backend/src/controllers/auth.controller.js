@@ -1,27 +1,28 @@
 import authServices from '../services/auth.service.js';
 
 
-const handleGoogleAuth = async(req,res)=>{
-    try{
+const handleGoogleAuth = async (req, res) => {
+    try {
         const credential = req?.body?.credential;
-        if(!credential || !(typeof credential === "string") || !credential.trim()){
+        if (!credential || !(typeof credential === "string") || !credential.trim()) {
             return res.status(400).json({
-                success:false,
-                message:"Bad Request: Credential is missing from the request body.",
+                success: false,
+                message: "Bad Request: Credential is missing from the request body.",
             });
         }
 
         const data = await authServices.verifyGoogleIdToken(credential);
-        const user = await authServices.findOrCreateUser(data.user);        
-        return res.status(200).json(user);       
+        const user = await authServices.findOrCreateUser(data.user);
+        const accessToken = await authServices.generateAccessToken(user);
+        return res.status(200).json(accessToken);
 
-    }catch (err) {
-        console.error("Internal Server Error:",err);
+    } catch (err) {
+        console.error("Internal Server Error:", err);
         return res.status(err.status || 500).json({
-            success:false,
-            message:err.message,
+            success: false,
+            message: err.message,
         })
-        
+
     }
 
 
